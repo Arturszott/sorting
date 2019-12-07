@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import uniqid from 'uniqid';
 import './App.css';
 
 // steps
@@ -50,23 +51,43 @@ const operations = sortBubble(initialArray);
 const generateSteps = (ops) => {
 	const localCopy = [ ...initialArray ];
 
-	return [
+	const results = [
 		initialArray,
 		...ops.map((pair) => {
 			executeSwap(pair, localCopy);
+
 			return [ ...localCopy ];
 		})
 	];
+
+	return results.map((stepArray, i) => ({
+		array: stepArray,
+		swap: ops[i]
+	}));
 };
 const steps = generateSteps(operations);
+function renderStep(step) {
+	return step.array.map((value, i) => {
+		const isHighlighted = step.swap && step.swap.includes(i);
 
+		return (
+			<span
+				style={{
+					color: isHighlighted ? 'red' : ''
+				}}
+			>
+				{value}
+			</span>
+		);
+	});
+}
 function App() {
-	const [ array, setArray ] = useState(initialArray);
+	const [ stepIndex, setStep ] = useState(0);
 
 	useEffect(() => {
 		for (let i = 0; i < steps.length; i++) {
 			window.setTimeout(() => {
-				setArray(steps[i]);
+				setStep(i);
 			}, 500 * i);
 		}
 	}, []);
@@ -74,7 +95,7 @@ function App() {
 	return (
 		<div className="App">
 			<header className="App-header">
-				<h1>{array}</h1>
+				<h1>{renderStep(steps[stepIndex])}</h1>
 			</header>
 		</div>
 	);
