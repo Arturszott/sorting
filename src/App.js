@@ -2,25 +2,74 @@ import React, { useState, useEffect } from 'react';
 import uniqid from 'uniqid';
 import './App.css';
 
-// steps
-// Show array
-
-// run algorithm on click
-// add operations to queue
-// play queue
-
-// operations: Compare, Swap,
-
-const isNextBigger = (array, i) => array[i + 1] > array[i];
-const isNextSmaller = (array, i) => {
-	const current = array[i];
-	const next = array[i + 1];
-
-	console.log(current, next, next < current);
-	return next < current;
-};
-
 const executeSwap = (pair, array) => ([ array[pair[0]], array[pair[1]] ] = [ array[pair[1]], array[pair[0]] ]);
+
+class List {
+	constructor(values) {
+		this.array = values;
+		this.elements = values.map((value, i) => new Element(value, i));
+		this.highlighted = [];
+	}
+
+	swap(pair) {
+		executeSwap(pair, this.array);
+
+		this.swapPositions(pair);
+	}
+
+	clearHighlight() {
+		this.highlighted.forEach((element) => (element.highlighted = false));
+	}
+
+	swapPositions(pair) {
+		this.clearHighlight();
+
+		const leftElement = this.elements.find((element) => element.position === pair[0]);
+		const rightElement = this.elements.find((element) => element.position === pair[1]);
+
+		this.highlighted = [ leftElement, rightElement ];
+
+		this.highlighted.forEach((element) => (element.highlighted = true));
+
+		[ leftElement.position, rightElement.position ] = [ rightElement.position, leftElement.position ];
+	}
+
+	finish() {
+		this.clearHighlight();
+	}
+
+	renderElements() {
+		return (
+			<ul style={{ position: 'relative' }}>
+				{this.elements.map((element) => (
+					<li
+						key={element.id}
+						style={{
+							color: element.highlighted ? 'red' : '',
+							transition: 'all 0.2s',
+							position: 'absolute',
+							listStyle: 'none',
+							left: element.position * 40,
+							top: 0
+						}}
+					>
+						{element.value}
+					</li>
+				))}
+			</ul>
+		);
+	}
+}
+
+class Element {
+	constructor(value, position) {
+		this.value = value;
+		this.position = position;
+		this.id = uniqid();
+	}
+}
+
+const isNextSmaller = (array, i) => array[i + 1] < array[i];
 
 function sortBubble(array) {
 	const localArray = [ ...array ];
@@ -48,54 +97,30 @@ function sortBubble(array) {
 
 const initialArray = [ 2, 4, 3, 5, 1 ];
 const operations = sortBubble(initialArray);
-const generateSteps = (ops) => {
-	const localCopy = [ ...initialArray ];
 
-	const results = [
-		initialArray,
-		...ops.map((pair) => {
-			executeSwap(pair, localCopy);
+const list = new List(initialArray);
 
-			return [ ...localCopy ];
-		})
-	];
-
-	return results.map((stepArray, i) => ({
-		array: stepArray,
-		swap: ops[i]
-	}));
-};
-const steps = generateSteps(operations);
-function renderStep(step) {
-	return step.array.map((value, i) => {
-		const isHighlighted = step.swap && step.swap.includes(i);
-
-		return (
-			<span
-				style={{
-					color: isHighlighted ? 'red' : ''
-				}}
-			>
-				{value}
-			</span>
-		);
-	});
-}
 function App() {
 	const [ stepIndex, setStep ] = useState(0);
 
 	useEffect(() => {
-		for (let i = 0; i < steps.length; i++) {
+		for (let i = 0; i < operations.length; i++) {
 			window.setTimeout(() => {
-				setStep(i);
-			}, 500 * i);
+				list.swap(operations[i]);
+				setStep(i + 1);
+			}, 500 * (i + 1));
 		}
+
+		window.setTimeout(() => {
+			list.finish();
+			setStep(stepIndex + 1);
+		}, operations.length * 500);
 	}, []);
 
 	return (
 		<div className="App">
 			<header className="App-header">
-				<h1>{renderStep(steps[stepIndex])}</h1>
+				<h1>{list.renderElements()}</h1>
 			</header>
 		</div>
 	);
