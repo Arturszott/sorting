@@ -75,27 +75,26 @@ class List {
 		this.clearComparison();
 	}
 
-	renderElements() {
+	renderElement(element) {
 		return (
-			<ul style={{ position: 'relative' }}>
-				{this.elements.map((element) => (
-					<li
-						key={element.id}
-						style={{
-							color: element.highlighted ? 'red' : '',
-							borderBottom: element.compared ? '3px solid #ccc' : '3px solid transparent',
-							transition: 'all 0.2s',
-							position: 'absolute',
-							listStyle: 'none',
-							left: element.position * 40,
-							top: 0
-						}}
-					>
-						{element.value}
-					</li>
-				))}
-			</ul>
+			<li
+				key={element.id}
+				style={{
+					color: element.highlighted ? 'red' : '',
+					borderBottom: element.compared ? '3px solid #ccc' : '3px solid transparent',
+					transition: 'all 0.2s',
+					position: 'absolute',
+					listStyle: 'none',
+					left: element.position * 40,
+					top: 0
+				}}
+			>
+				{element.value}
+			</li>
 		);
+	}
+	renderElements() {
+		return <ul style={{ position: 'relative' }}>{this.elements.map(this.renderElement)}</ul>;
 	}
 }
 
