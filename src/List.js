@@ -2,7 +2,7 @@ import React from 'react';
 import uniqid from 'uniqid';
 
 import { executeSwap } from './utils';
-import { Swap } from './sorting/operations';
+import { Swap, Compare } from './sorting/operations';
 
 class Element {
 	constructor(value, position) {
@@ -17,16 +17,38 @@ class List {
 		this.array = values;
 		this.elements = values.map((value, i) => new Element(value, i));
 		this.highlighted = [];
+		this.compared = [];
 	}
 
 	execute(operation) {
 		if (operation instanceof Swap) {
 			this.swap(operation);
 		}
+
+		if (operation instanceof Compare) {
+			this.compare(operation);
+		}
 	}
 
 	clearHighlight() {
 		this.highlighted.forEach((element) => (element.highlighted = false));
+	}
+
+	clearComparison() {
+		this.compared.forEach((element) => (element.compared = false));
+	}
+
+	compare(operation) {
+		this.clearComparison();
+
+		const comparedElements = operation.pair.map((index) =>
+			this.elements.find((element) => element.position === index)
+		);
+
+		console.log(comparedElements);
+
+		this.compared = comparedElements;
+		this.compared.forEach((element) => (element.compared = true));
 	}
 
 	swap(operation) {
@@ -50,6 +72,7 @@ class List {
 
 	finish() {
 		this.clearHighlight();
+		this.clearComparison();
 	}
 
 	renderElements() {
@@ -60,6 +83,7 @@ class List {
 						key={element.id}
 						style={{
 							color: element.highlighted ? 'red' : '',
+							borderBottom: element.compared ? '3px solid #ccc' : '3px solid transparent',
 							transition: 'all 0.2s',
 							position: 'absolute',
 							listStyle: 'none',

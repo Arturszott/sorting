@@ -1,9 +1,7 @@
-import { executeSwap } from '../utils';
-import { Swap } from './operations';
-
-const isNextSmaller = (array, i) => array[i + 1] < array[i];
+import { Swap, Compare } from './operations';
 
 export default function sortBubble(array) {
+	const isSmaller = (a, b) => b < a;
 	const localArray = [ ...array ];
 	const operations = [];
 	let shouldSort = true;
@@ -12,11 +10,15 @@ export default function sortBubble(array) {
 		let iterationsSwapsCount = 0;
 
 		for (let i = 0; i < localArray.length - 1; i++) {
-			if (isNextSmaller(localArray, i)) {
-				const operation = new Swap(i, i + 1);
+			const compare = new Compare(i, i + 1, isSmaller);
 
-				operation.applyTo(localArray);
-				operations.push(operation);
+			operations.push(compare);
+
+			if (compare.applyTo(localArray)) {
+				const swap = new Swap(i, i + 1);
+
+				swap.applyTo(localArray);
+				operations.push(swap);
 				iterationsSwapsCount++;
 			}
 		}

@@ -16,4 +16,10 @@ export class Compare extends Operation {
 		super(indexA, indexB);
 		this.compareWith = fn;
 	}
+
+	applyTo(array) {
+		const [ a, b ] = this.pair;
+
+		return this.compareWith(array[a], array[b]);
+	}
 }
