@@ -7,6 +7,7 @@ import bubbleSort from './sorting/bubble';
 function SelectionPage() {
 	const [ state, setState ] = useState({});
 	const [ values, changeValues ] = useState([ 2, 4, 3, 5, 6, 1 ].join(' '));
+	const [ time, setTime ] = useState(400);
 
 	const onBubbleClick = () => {
 		const numbers = values.trim().split(' ').map(Number);
@@ -22,15 +23,20 @@ function SelectionPage() {
 	const picker = (
 		<React.Fragment>
 			<input type="text" value={values} onChange={(e) => changeValues(e.target.value)} />
+			<input type="number" step="50" value={time} onChange={(e) => setTime(Number(e.target.value))} />
 
 			<button onClick={onBubbleClick}>Bubble sort</button>
 		</React.Fragment>
 	);
 
-	return state.operations ? <ReplayPage operations={state.operations} list={state.list} name={state.name} /> : picker;
+	return state.operations ? (
+		<ReplayPage operations={state.operations} list={state.list} name={state.name} time={time} />
+	) : (
+		picker
+	);
 }
 
-function ReplayPage({ operations, list, name }) {
+function ReplayPage({ operations, list, name, time }) {
 	const [ stepIndex, setStep ] = useState(0);
 
 	useEffect(
@@ -39,13 +45,13 @@ function ReplayPage({ operations, list, name }) {
 				window.setTimeout(() => {
 					list.execute(operations[i]);
 					setStep(i + 1);
-				}, 500 * (i + 1));
+				}, time * (i + 1));
 			}
 
 			window.setTimeout(() => {
 				list.finish();
 				setStep(stepIndex + 1);
-			}, operations.length * 500);
+			}, operations.length * time);
 		},
 		[ operations, list ]
 	);
