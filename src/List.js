@@ -73,18 +73,21 @@ class List {
 		this.clearComparison();
 	}
 
-	renderElement(element) {
+	renderElement(element, i) {
+		const width = 20;
+		const padding = 4;
+
 		return (
 			<li
 				key={element.id}
 				style={{
 					color: element.highlighted ? 'red' : '',
 					borderBottom: element.compared ? '3px solid #ccc' : '3px solid transparent',
+					width: `${width}px`,
 					transition: 'all 0.2s',
-					position: 'absolute',
 					listStyle: 'none',
-					left: element.position * 40,
-					top: 0
+					transform: `translateX(${(element.position - i) * (width + 2 * padding)}px)`,
+					padding: `${padding}px`
 				}}
 			>
 				{element.value}
@@ -92,7 +95,7 @@ class List {
 		);
 	}
 	renderElements() {
-		return <ul style={{ position: 'relative' }}>{this.elements.map(this.renderElement)}</ul>;
+		return <ul style={{ display: 'flex', padding: 0 }}>{this.elements.map(this.renderElement)}</ul>;
 	}
 }
 
