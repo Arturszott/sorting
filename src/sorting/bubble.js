@@ -1,7 +1,7 @@
 import { Swap, Compare } from './operations';
 
 export default function sortBubble(array) {
-	const isSmaller = (a, b) => b < a;
+	const isBigger = (a, b) => a > b;
 	const localArray = [ ...array ];
 	const operations = [];
 	let shouldSort = true;
@@ -10,7 +10,7 @@ export default function sortBubble(array) {
 		let iterationsSwapsCount = 0;
 
 		for (let i = 0; i < localArray.length - 1; i++) {
-			const compare = new Compare(i, i + 1, isSmaller);
+			const compare = new Compare(i, i + 1, isBigger);
 
 			operations.push(compare);
 
