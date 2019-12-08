@@ -45,8 +45,6 @@ class List {
 			this.elements.find((element) => element.position === index)
 		);
 
-		console.log(comparedElements);
-
 		this.compared = comparedElements;
 		this.compared.forEach((element) => (element.compared = true));
 	}

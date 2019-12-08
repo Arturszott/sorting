@@ -1,6 +1,7 @@
 import { Swap, Compare } from './operations';
 
 export default function sortBubble(array) {
+	console.log(array);
 	const isSmaller = (a, b) => b < a;
 	const localArray = [ ...array ];
 	const operations = [];
