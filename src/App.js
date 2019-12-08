@@ -6,7 +6,7 @@ import bubbleSort from './sorting/bubble';
 
 function SelectionPage() {
 	const [ state, setState ] = useState({});
-	const [ values, changeValues ] = useState([ 2, 4, 3, 5, 1, 10 ].join(' '));
+	const [ values, changeValues ] = useState([ 2, 4, 3, 5, 6, 1 ].join(' '));
 
 	const onBubbleClick = () => {
 		const numbers = values.trim().split(' ').map(Number);
