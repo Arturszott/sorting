@@ -75,7 +75,7 @@ class List {
 
 	renderElement(element, i) {
 		const width = 20;
-		const padding = 4;
+		const padding = 10;
 
 		return (
 			<li

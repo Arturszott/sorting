@@ -6,24 +6,22 @@ import bubbleSort from './sorting/bubble';
 
 function SelectionPage() {
 	const [ state, setState ] = useState({});
-	const [ values, changeValues ] = useState([ 2, 4, 3, 5, 1 ]);
+	const [ values, changeValues ] = useState([ 2, 4, 3, 5, 1, 10 ].join(' '));
 
 	const onBubbleClick = () => {
+		const numbers = values.trim().split(' ').map(Number);
+
 		setState({
 			...state,
-			operations: bubbleSort(values),
-			list: new List(values),
+			operations: bubbleSort(numbers),
+			list: new List(numbers),
 			name: 'Bubble sort'
 		});
 	};
 
 	const picker = (
 		<React.Fragment>
-			<input
-				type="text"
-				value={values.join(' ')}
-				onChange={(e) => changeValues(e.target.value.split(' ').map(Number))}
-			/>
+			<input type="text" value={values} onChange={(e) => changeValues(e.target.value)} />
 
 			<button onClick={onBubbleClick}>Bubble sort</button>
 		</React.Fragment>
