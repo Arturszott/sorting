@@ -3,29 +3,37 @@ import './App.css';
 
 import List from './List';
 import bubbleSort from './sorting/bubble';
+import selectionSort from './sorting/selection';
 
 function SelectionPage() {
 	const [ state, setState ] = useState({});
 	const [ values, changeValues ] = useState([ 2, 4, 3, 5, 6, 1 ].join(' '));
 	const [ time, setTime ] = useState(400);
 
-	const onBubbleClick = () => {
+	const updateState = (algorithm, name) => {
 		const numbers = values.trim().split(' ').map(Number);
 
 		setState({
 			...state,
-			operations: bubbleSort(numbers),
+			operations: algorithm(numbers),
 			list: new List(numbers),
-			name: 'Bubble sort'
+			name
 		});
 	};
+
+	const algorithms = [
+		{ name: 'Bubble sort', handler: bubbleSort },
+		{ name: 'Selection sort', handler: selectionSort }
+	];
 
 	const picker = (
 		<React.Fragment>
 			<input type="text" value={values} onChange={(e) => changeValues(e.target.value)} />
 			<input type="number" step="50" value={time} onChange={(e) => setTime(Number(e.target.value))} />
 
-			<button onClick={onBubbleClick}>Bubble sort</button>
+			{algorithms.map(({ name, handler }) => {
+				return <button onClick={() => updateState(handler, name)}>{name}</button>;
+			})}
 		</React.Fragment>
 	);
 
