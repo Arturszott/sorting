@@ -6,6 +6,12 @@ import bubbleSort from './sorting/bubble';
 import selectionSort from './sorting/selection';
 import insertionSort from './sorting/insertion';
 
+const algorithms = [
+	{ name: 'Bubble sort', handler: bubbleSort },
+	{ name: 'Selection sort', handler: selectionSort },
+	{ name: 'Insertion sort', handler: insertionSort }
+];
+
 function SelectionPage() {
 	const [ state, setState ] = useState({});
 	const [ values, changeValues ] = useState([ 2, 4, 3, 5, 6, 1 ].join(' '));
@@ -21,12 +27,6 @@ function SelectionPage() {
 			name
 		});
 	};
-
-	const algorithms = [
-		{ name: 'Bubble sort', handler: bubbleSort },
-		{ name: 'Selection sort', handler: selectionSort },
-		{ name: 'Insertion sort', handler: insertionSort }
-	];
 
 	const picker = (
 		<React.Fragment>

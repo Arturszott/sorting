@@ -77,19 +77,18 @@ class List {
 		const width = 20;
 		const padding = 10;
 
+		const elementStyle = {
+			color: element.highlighted ? 'red' : '',
+			borderBottom: element.compared ? '3px solid #ccc' : '3px solid transparent',
+			width: `${width}px`,
+			transition: 'all 0.2s',
+			listStyle: 'none',
+			transform: `translateX(${(element.position - i) * (width + 2 * padding)}px)`,
+			padding: `${padding}px`
+		};
+
 		return (
-			<li
-				key={element.id}
-				style={{
-					color: element.highlighted ? 'red' : '',
-					borderBottom: element.compared ? '3px solid #ccc' : '3px solid transparent',
-					width: `${width}px`,
-					transition: 'all 0.2s',
-					listStyle: 'none',
-					transform: `translateX(${(element.position - i) * (width + 2 * padding)}px)`,
-					padding: `${padding}px`
-				}}
-			>
+			<li key={element.id} style={elementStyle}>
 				{element.value}
 			</li>
 		);
