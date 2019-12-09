@@ -4,6 +4,7 @@ import './App.css';
 import List from './List';
 import bubbleSort from './sorting/bubble';
 import selectionSort from './sorting/selection';
+import insertionSort from './sorting/insertion';
 
 function SelectionPage() {
 	const [ state, setState ] = useState({});
@@ -23,7 +24,8 @@ function SelectionPage() {
 
 	const algorithms = [
 		{ name: 'Bubble sort', handler: bubbleSort },
-		{ name: 'Selection sort', handler: selectionSort }
+		{ name: 'Selection sort', handler: selectionSort },
+		{ name: 'Insertion sort', handler: insertionSort }
 	];
 
 	const picker = (
@@ -32,7 +34,11 @@ function SelectionPage() {
 			<input type="number" step="50" value={time} onChange={(e) => setTime(Number(e.target.value))} />
 
 			{algorithms.map(({ name, handler }) => {
-				return <button onClick={() => updateState(handler, name)}>{name}</button>;
+				return (
+					<button key={name} onClick={() => updateState(handler, name)}>
+						{name}
+					</button>
+				);
 			})}
 		</React.Fragment>
 	);
