@@ -1,23 +1,15 @@
-import { Swap, Compare } from './operations';
+import { createOperations } from './operations';
 
 export default function sortInsertion(array) {
-	const isSmaller = (a, b) => a < b;
-	const localArray = [ ...array ];
-	const operations = [];
+	const compareFn = (a, b) => a < b;
+	const [ operations, compare, swap ] = createOperations(compareFn, array);
 
-	for (let i = 0; i < localArray.length; i++) {
+	for (let i = 0; i < array.length; i++) {
 		let movableElementIndex = i;
 
 		for (let j = movableElementIndex - 1; j >= 0; j--) {
-			const compare = new Compare(movableElementIndex, j, isSmaller);
-
-			operations.push(compare);
-
-			if (compare.applyTo(localArray)) {
-				const swap = new Swap(movableElementIndex, j);
-
-				swap.applyTo(localArray);
-				operations.push(swap);
+			if (compare(movableElementIndex, j)) {
+				swap(movableElementIndex, j);
 
 				movableElementIndex = j;
 			} else {

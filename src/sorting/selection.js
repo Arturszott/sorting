@@ -1,30 +1,23 @@
-import { Swap, Compare } from './operations';
+import { createOperations } from './operations';
 
 export default function sortSelection(array) {
-	const isSmaller = (a, b) => a < b;
-	const localArray = [ ...array ];
-	const operations = [];
+	const compareFn = (a, b) => a < b;
+	const [ operations, compare, swap ] = createOperations(compareFn, array);
+
 	let lastUnsortedElementIndex = 0;
 	let shouldSort = true;
 
 	while (shouldSort) {
 		let smallestNumberIndex = lastUnsortedElementIndex;
 
-		for (let i = lastUnsortedElementIndex; i < localArray.length; i++) {
-			const compare = new Compare(i, smallestNumberIndex, isSmaller);
-
-			operations.push(compare);
-
-			if (compare.applyTo(localArray)) {
+		for (let i = lastUnsortedElementIndex; i < array.length; i++) {
+			if (compare(i, smallestNumberIndex)) {
 				smallestNumberIndex = i;
 			}
 		}
 
 		if (lastUnsortedElementIndex !== smallestNumberIndex) {
-			const swap = new Swap(lastUnsortedElementIndex, smallestNumberIndex);
-
-			swap.applyTo(localArray);
-			operations.push(swap);
+			swap(lastUnsortedElementIndex, smallestNumberIndex);
 		}
 
 		lastUnsortedElementIndex++;
